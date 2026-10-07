@@ -1,0 +1,14 @@
+{
+  "name": "mermaid-view",
+  "version": "0.1.0",
+  "description": "返答の mermaid のブロックを、ターミナルの中で色付きの罫線の図として描く",
+  "author": { "name": "shou6" },
+  "userConfig": {
+    "ascii": {
+      "type": "boolean",
+      "title": "ASCII で描く",
+      "description": "罫線の文字がないフォント向けに、+ - | > で図を描く",
+      "default": false
+    }
+  }
+}
