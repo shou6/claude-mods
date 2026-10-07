@@ -24,3 +24,7 @@ Thumbs.db
 
 # 実装メモ
 docs/backlog/
+.automation/
+
+# 自発提案の状態ファイル
+.automation/
