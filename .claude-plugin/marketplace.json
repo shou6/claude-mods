@@ -9,6 +9,11 @@
       "name": "status-band",
       "source": "./status-band",
       "description": "プロンプト上の帯に、モデル名とコンテキスト・セッション・週間の使用率をバーで表示する"
+    },
+    {
+      "name": "mermaid-view",
+      "source": "./mermaid-view",
+      "description": "返答の mermaid のブロックを、ターミナルの中で色付きの罫線の図として描く"
     }
   ]
 }
