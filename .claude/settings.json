@@ -14,7 +14,10 @@
       "Bash(mkdir *)",
       "Bash(touch *)",
       "WebFetch(domain:github.com)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(claude plugin validate *)",
+      "Bash(claude plugin test *)",
+      "Bash(npx tsc *)"
     ],
     "ask": [],
     "deny": [

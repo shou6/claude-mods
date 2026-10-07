@@ -20,7 +20,9 @@ Conventional Commits 形式で、要約は日本語で書く。
 
 ## scope
 
-主な変更領域を短く入れる。プロジェクトごとに次の一覧を書き換える：`docs` / `deps` / `config` / `ci`
+主な変更領域を短く入れる。Mod を変えたときは Mod のフォルダ名を scope にする（例：`status-band`）。
+
+それ以外は次の一覧から選ぶ：`marketplace` / `docs` / `deps` / `config` / `ci`
 
 ## ルール
 
@@ -32,8 +34,8 @@ Conventional Commits 形式で、要約は日本語で書く。
 ## 例
 
 ```text
-feat(api): 一覧APIに絞り込みを追加
-fix(import): CSV の文字コード変換を修正
-docs(docs): 設計書にエラー形式を追記
-chore(deps): 依存パッケージを更新
+feat(status-band): 使用率をバーで表示
+fix(status-band): リセット時刻の分の切り捨てを修正
+chore(marketplace): 新しい Mod を一覧に追加
+docs(docs): README に導入手順を追記
 ```
