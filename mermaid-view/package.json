@@ -1,0 +1,13 @@
+{
+  "name": "mermaid-view-build",
+  "private": true,
+  "description": "beautiful-mermaid の ASCII 描画を hooks/vendor/ に 1 ファイルで同梱するための設定",
+  "type": "module",
+  "scripts": {
+    "vendor": "node scripts/build-vendor.mjs"
+  },
+  "devDependencies": {
+    "beautiful-mermaid": "1.1.3",
+    "esbuild": "^0.25.0"
+  }
+}

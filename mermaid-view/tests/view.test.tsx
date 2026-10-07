@@ -79,7 +79,7 @@ test('日本語のラベルでも枠がずれない', async ($, on) => {
   const lines = await diagramLines(ui)
   const label = lines.find(line => line.includes('開始'))!
 
-  expect(label).toMatch(/│\s*開始\s*│/)
+  expect(label).toMatch(/│\s*開始\s*[│├]/)
   expect(displayWidth(label.trimEnd())).toBe(displayWidth(lines[0]!.trimEnd()))
 })
 
