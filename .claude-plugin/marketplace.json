@@ -1,0 +1,14 @@
+{
+  "name": "shou6-mods",
+  "owner": { "name": "shou6" },
+  "metadata": {
+    "description": "Claude Code の Mod 集"
+  },
+  "plugins": [
+    {
+      "name": "status-band",
+      "source": "./status-band",
+      "description": "プロンプト上の帯に、モデル名とコンテキスト・セッション・週間の使用率をバーで表示する"
+    }
+  ]
+}

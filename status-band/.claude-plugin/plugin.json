@@ -1,0 +1,6 @@
+{
+  "name": "status-band",
+  "version": "0.1.0",
+  "description": "プロンプト上の帯に、モデル名とコンテキスト・セッション・週間の使用率をバーで表示する",
+  "types": "./types/index.d.ts"
+}
