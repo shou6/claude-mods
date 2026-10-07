@@ -1,0 +1,20 @@
+# 環境変数（キー名だけを .env.example に書く）
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
+
+# ビルド成果物・キャッシュ
+dist/
+out/
+.cache/
+
+# OS・エディタ
+.DS_Store
+Thumbs.db
+~$*
+*.tmp
+*.log
+*.stackdump
