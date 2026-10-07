@@ -21,3 +21,6 @@ Thumbs.db
 
 # Mod の型定義（Claude Code が読み込みのたびに生成する）
 **/.claude-plugin/types/
+
+# 実装メモ
+docs/backlog/
