@@ -9,6 +9,7 @@ Claude Code の Mod 集。1 つのリポジトリを marketplace（`shou6-mods`�
 | [status-band](./status-band) | プロンプト上の帯に、モデル名とコンテキスト・セッション・週間の使用率をバーで表示する |
 | [mermaid-view](./mermaid-view) | 返答の mermaid のブロックを、ターミナルの中で色付きの罫線の図として描く |
 | [compact-tools](./compact-tools) | ターミナルでシェルの出力を 1 行に畳み、/compact-tools で全出力表示と切り替える |
+| [pr-watch](./pr-watch) | 自分の PR の状態とレビュー依頼の件数を帯に出し、/prs で一覧を開く |
 
 ## 導入
 
@@ -18,6 +19,7 @@ Claude Code のターミナルで、入れたい Mod ごとに次を実行する
 /plugin install status-band --marketplace shou6/claude-mods
 /plugin install mermaid-view --marketplace shou6/claude-mods
 /plugin install compact-tools --marketplace shou6/claude-mods
+/plugin install pr-watch --marketplace shou6/claude-mods
 ```
 
 marketplace の追加を聞かれたら `y` を押し、スコープを選ぶ。
@@ -26,6 +28,14 @@ marketplace の追加を聞かれたら `y` を押し、スコープを選ぶ。
 
 - Claude Code v2.1.287 以降
 - 表示はターミナルの `claude` と Desktop アプリの Code タブだけで出る。VS Code 拡張のチャット欄には出ない
+
+## pr-watch の使い方
+
+pr-watch は GitHub CLI（`gh`）で PR を取る。`gh auth login` でログインしておく。
+
+- 帯に `PR 3（CI 失敗 1）· レビュー依頼 2` のように出す。CI の失敗、変更要求、競合があればその数も添える
+- `/prs` で取り直し、自分の PR とレビュー依頼の一覧を Pane に開く
+- 既定では 5 分ごとに、すべてのリポジトリから取り直す。間隔（`intervalMinutes`）と対象（`scope` を `repo` にすると今いるリポジトリだけ）は設定で変えられる
 
 ## ライセンス
 
