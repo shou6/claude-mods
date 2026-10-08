@@ -42,3 +42,12 @@ export const toLines = (records: readonly LedgerRecord[], ts: string, sessionId:
 // 既存の中身の末尾に改行がなければ足してからつなぐ
 export const joinLines = (text: string, lines: string) =>
   (text === '' || text.endsWith('\n') ? text : `${text}\n`) + lines
+
+// ファイルパスを記録するツール。ほかのツールの引数は残さない
+export const PATH_TOOLS: readonly string[] = ['Read', 'Edit', 'Write']
+
+// プロンプトの先頭。改行と連続する空白を 1 つの空白にまとめてから、文字数で切る
+export const promptHead = (text: string, chars: number) =>
+  Array.from(text.replace(/\s+/g, ' ').trim())
+    .slice(0, Math.max(0, chars))
+    .join('')

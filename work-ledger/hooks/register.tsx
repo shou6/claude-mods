@@ -1,12 +1,34 @@
 import type { EngineInterface, Register } from 'claude-code'
 
-import { bytes, fileOf, joinLines, LIMIT, localDate, localIso, resolveDir, toLines, type LedgerRecord } from './ledger'
+import {
+  bytes,
+  fileOf,
+  joinLines,
+  LIMIT,
+  localDate,
+  localIso,
+  PATH_TOOLS,
+  promptHead,
+  resolveDir,
+  toLines,
+  type LedgerRecord,
+} from './ledger'
 
 const NOTE = 'note'
 
 // ターンが終わるまで、ツール呼び出しをループ（メインは ''、サブエージェントは agentId）ごとに溜める
-type PendingTool = { tool: string; durationMs: number; resultChars: number; isError: boolean }
+type PendingTool = {
+  ts: string
+  tool: string
+  path?: string
+  durationMs: number
+  resultChars: number
+  isError: boolean
+}
 const pending = new Map<string, PendingTool[]>()
+
+// メインのループのターンを始めたプロンプトの先頭を、turnId ごとにターンの終わりまで置く
+const prompts = new Map<string, string>()
 
 // 書き込みは 1 つずつ順に行う。並んだサブエージェントが同じファイルを読み書きしても行を失わない
 let queue: Promise<void> = Promise.resolve()
@@ -61,6 +83,7 @@ async function write($: EngineInterface, dir: string, records: readonly LedgerRe
 
 export const register: Register = (on, options) => {
   const dir = typeof options.dir === 'string' ? options.dir.trim() : ''
+  const promptChars = typeof options.promptChars === 'number' ? Math.max(0, Math.floor(options.promptChars)) : 100
 
   on('session.start', async ($, e, next) => {
     await $.command.register({ name: NOTE, description: '作業メモを記録に残す', argumentHint: '<本文>' })
@@ -77,15 +100,25 @@ export const register: Register = (on, options) => {
     return next(e)
   })
 
+  on('turn.start', async ($, e, next) => {
+    const head = promptHead(e.text, promptChars)
+    if (head !== '') prompts.set(e.turnId, head)
+
+    return next(e)
+  })
+
   on('tool.call', async ($, e, next) => {
     const startedAt = await $.clock.now()
     const result = await next(e)
     const durationMs = (await $.clock.now()) - startedAt
 
-    // 引数と結果の本文は残さない。結果は文字数だけを測る
+    // 引数はファイルパスだけを残し、結果の本文は残さない。結果は文字数だけを測る
     const isDenied = result.deny !== undefined
+    const filePath = (e as { file_path?: unknown }).file_path
     const call: PendingTool = {
+      ts: localIso(startedAt),
       tool: e.tool,
+      ...(PATH_TOOLS.includes(e.tool) && typeof filePath === 'string' ? { path: filePath } : {}),
       durationMs,
       resultChars: isDenied ? 0 : (result.text?.length ?? 0),
       isError: isDenied || result.isError === true,
@@ -104,6 +137,8 @@ export const register: Register = (on, options) => {
     pending.delete(loop)
 
     const agent = e.agentId === undefined ? {} : { agentId: e.agentId }
+    const prompt = prompts.get(e.turnId)
+    prompts.delete(e.turnId)
     const usage = e.usage
       ? {
           input: e.usage.input_tokens,
@@ -124,6 +159,7 @@ export const register: Register = (on, options) => {
         durationMs: e.durationMs,
         reason: e.reason,
         usage,
+        ...(prompt === undefined || e.agentId !== undefined ? {} : { prompt }),
       },
     ])
 
