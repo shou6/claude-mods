@@ -8,6 +8,7 @@ Claude Code の Mod 集。1 つのリポジトリを marketplace（`shou6-mods`�
 | --- | --- |
 | [status-band](./status-band) | プロンプト上の帯に、モデル名とコンテキスト・セッション・週間の使用率をバーで表示する |
 | [mermaid-view](./mermaid-view) | 返答の mermaid のブロックを、ターミナルの中で色付きの罫線の図として描く |
+| [compact-tools](./compact-tools) | ターミナルでシェルの出力を 1 行に畳み、/compact-tools で全出力表示と切り替える |
 
 ## 導入
 
@@ -16,6 +17,7 @@ Claude Code のターミナルで、入れたい Mod ごとに次を実行する
 ```text
 /plugin install status-band --marketplace shou6/claude-mods
 /plugin install mermaid-view --marketplace shou6/claude-mods
+/plugin install compact-tools --marketplace shou6/claude-mods
 ```
 
 marketplace の追加を聞かれたら `y` を押し、スコープを選ぶ。
