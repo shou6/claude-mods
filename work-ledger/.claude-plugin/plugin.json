@@ -1,0 +1,14 @@
+{
+  "name": "work-ledger",
+  "version": "0.1.0",
+  "description": "ターンごとのトークンとツール呼び出しを JSONL に記録し、/note で作業メモを残す",
+  "author": { "name": "shou6" },
+  "userConfig": {
+    "dir": {
+      "type": "string",
+      "title": "記録の置き場所",
+      "description": "記録を書くフォルダ。空なら ~/.claude/work-ledger（既定：空）",
+      "default": ""
+    }
+  }
+}
