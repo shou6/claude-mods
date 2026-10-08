@@ -10,6 +10,7 @@ Claude Code の Mod 集。1 つのリポジトリを marketplace（`shou6-mods`�
 | [mermaid-view](./mermaid-view) | 返答の mermaid のブロックを、ターミナルの中で色付きの罫線の図として描く |
 | [compact-tools](./compact-tools) | ターミナルでシェルの出力を 1 行に畳み、/compact-tools で全出力表示と切り替える |
 | [pr-watch](./pr-watch) | 自分の PR の状態とレビュー依頼の件数を帯に出し、/prs で一覧を開く |
+| [work-ledger](./work-ledger) | ターンごとのトークンとツール呼び出しを JSONL に記録し、/note で作業メモを残す |
 
 ## 導入
 
@@ -20,6 +21,7 @@ Claude Code のターミナルで、入れたい Mod ごとに次を実行する
 /plugin install mermaid-view --marketplace shou6/claude-mods
 /plugin install compact-tools --marketplace shou6/claude-mods
 /plugin install pr-watch --marketplace shou6/claude-mods
+/plugin install work-ledger --marketplace shou6/claude-mods
 ```
 
 marketplace の追加を聞かれたら `y` を押し、スコープを選ぶ。
@@ -44,6 +46,23 @@ pr-watch は GitHub CLI（`gh`）で PR を取る。`gh auth login` でログイ
   - 「レビューする」：レビュー依頼
 - 取り直したときに、CI の失敗と成功、承認と変更要求、新しいレビュー依頼をトーストで知らせる
 - 既定では 5 分ごとに、すべてのリポジトリから取り直す。間隔（`intervalMinutes`）と対象（`scope` を `repo` にすると今いるリポジトリだけ）は設定で変えられる
+
+## work-ledger の記録
+
+work-ledger は、記録を `~/.claude/work-ledger/<日付>/<セッション ID>.jsonl` に 1 件 1 行で書く。置き場所は設定の `dir` で変えられる。日報やコストの分析は、このファイルを読むスキルを作れば行える。
+
+全件に `v`（形式の版）、`type`、`ts`（ローカル時刻の ISO 8601）、`sessionId` が付く。
+
+| type | 項目 | 書く時点 |
+| --- | --- | --- |
+| `session` | `event`（`start` / `end`）、`cwd`、`repo`（開始時）、`reason`（終了時） | セッションの開始と終了 |
+| `turn` | `turnId`、`agentId`（サブエージェントのみ）、`cwd`、`model`、`durationMs`、`reason`、`usage`（`input` / `output` / `cacheRead` / `cacheCreation`）、`prompt`（メインのループのみ） | ターンの終わり |
+| `tool` | `turnId`、`agentId`（サブエージェントのみ）、`tool`、`path`（Read / Edit / Write のみ）、`durationMs`、`resultChars`、`isError` | ターンの終わりにまとめて。`ts` は呼び出しを始めた時刻 |
+| `note` | `cwd`、`text` | `/note <本文>` |
+
+- `prompt` は、ターンを始めたプロンプトの先頭 100 文字。改行と連続する空白は 1 つの空白にまとめる。文字数は設定の `promptChars` で変えられ、0 にすると記録しない
+- ファイルパスのほかのツールの引数、ツールの結果の本文、返答の本文は記録しない。`resultChars` は結果の文字数だけを数える
+- 1 つのファイルが 3 MiB を超えたら、続きを `<セッション ID>-2.jsonl` に書く
 
 ## ライセンス
 

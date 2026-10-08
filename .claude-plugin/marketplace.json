@@ -26,6 +26,11 @@
       "name": "pr-watch",
       "source": "./pr-watch",
       "description": "自分の PR の状態とレビュー依頼の件数を帯に出し、/prs で一覧を開く"
+    },
+    {
+      "name": "work-ledger",
+      "source": "./work-ledger",
+      "description": "ターンごとのトークンとツール呼び出しを JSONL に記録し、/note で作業メモを残す"
     }
   ]
 }
