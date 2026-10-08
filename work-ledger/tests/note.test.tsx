@@ -1,6 +1,6 @@
 import { expect, test } from 'claude-code/testing'
 
-import { DIR, engine, NOW, START, TODAY } from './engine'
+import { DIR, engine, START, TODAY, TS } from './engine'
 
 const OPTIONS = { options: { dir: DIR } }
 const FILE = `${TODAY}/s1.jsonl`
@@ -27,7 +27,7 @@ test('/note の本文を note として書き、書いたことを返す', OPTIO
   expect(records(FILE).at(-1)).toEqual({
     v: 1,
     type: 'note',
-    ts: new Date(NOW).toISOString(),
+    ts: TS,
     sessionId: 's1',
     cwd: START.cwd,
     text: '認証まわりの調査を終えた',

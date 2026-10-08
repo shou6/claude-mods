@@ -1,6 +1,6 @@
 import { expect, mock, test } from 'claude-code/testing'
 
-import { COMPLETE, DIR, engine, NOW, START, TODAY, USAGE } from './engine'
+import { COMPLETE, DIR, engine, NOW, START, TODAY, TS, USAGE } from './engine'
 
 const OPTIONS = { options: { dir: DIR } }
 const FILE = `${TODAY}/s1.jsonl`
@@ -13,7 +13,7 @@ test('セッションが始まると session の start を書く', OPTIONS, asyn
     {
       v: 1,
       type: 'session',
-      ts: new Date(NOW).toISOString(),
+      ts: TS,
       sessionId: 's1',
       event: 'start',
       cwd: START.cwd,
@@ -30,7 +30,7 @@ test('ターンが終わると turn を 1 行書き、usage を短い名前に�
     {
       v: 1,
       type: 'turn',
-      ts: new Date(NOW).toISOString(),
+      ts: TS,
       sessionId: 's1',
       turnId: 't1',
       cwd: START.cwd,
@@ -40,6 +40,15 @@ test('ターンが終わると turn を 1 行書き、usage を短い名前に�
       usage: { input: 1200, output: 3400, cacheRead: 82000, cacheCreation: 5100 },
     },
   ])
+})
+
+test('時刻はローカル時刻に UTC との差を付けて書き、読み戻すと同じ時刻になる', OPTIONS, async ($, on) => {
+  const { records } = engine(on)
+  await $.turn.complete(COMPLETE)
+
+  const ts = String(records(FILE)[0]?.ts)
+  expect(ts).toBe(TS)
+  expect(Date.parse(ts)).toBe(NOW)
 })
 
 test('usage がないターンは usage を null にし、モデルはセッションのものを書く', OPTIONS, async ($, on) => {
@@ -63,7 +72,7 @@ test('ターン中のツール呼び出しは、ターンの終わりに tool �
   expect(records(FILE)[0]).toEqual({
     v: 1,
     type: 'tool',
-    ts: new Date(NOW).toISOString(),
+    ts: TS,
     sessionId: 's1',
     turnId: 't1',
     tool: 'Read',

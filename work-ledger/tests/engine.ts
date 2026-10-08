@@ -4,6 +4,11 @@ import { mock } from 'claude-code/testing'
 // 2026-10-08 12:00（ローカル時刻）。日付のフォルダはローカルの日付で決まる
 export const NOW = new Date(2026, 9, 8, 12, 0, 0).getTime()
 
+// 記録の時刻はローカル時刻に UTC との差を付けた ISO 8601（日本なら 2026-10-08T12:00:00.000+09:00）
+const offset = -new Date(NOW).getTimezoneOffset()
+const hhmm = `${String(Math.floor(Math.abs(offset) / 60)).padStart(2, '0')}:${String(Math.abs(offset) % 60).padStart(2, '0')}`
+export const TS = `2026-10-08T12:00:00.000${offset < 0 ? '-' : '+'}${hhmm}`
+
 export const DIR = '/ledger'
 export const TODAY = `${DIR}/2026-10-08`
 
