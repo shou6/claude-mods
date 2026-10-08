@@ -112,7 +112,7 @@ test('tools に挙げたツールだけを畳む', { options: { tools: 'PowerShe
   const bash = await $.ui.mount({ ...row({}), surface: 'terminal' })
   expect(await bash.find(standard)).toBeDefined()
 
-  const ps = await $.ui.mount({ ...row({ tool: 'PowerShell' }), surface: 'terminal' })
+  const ps = await $.ui.mount({ ...row({ tool: 'PowerShell' }), requestId: 't2', surface: 'terminal' })
   expect(await ps.find(summary)).toBeDefined()
 })
 
