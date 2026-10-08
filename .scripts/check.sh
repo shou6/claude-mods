@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Mod のコミット前の確認（validate・test・tsc）をまとめて通す
-# 使い方: scripts/check.sh <mod>
+# 使い方: .scripts/check.sh <mod>
 set -euo pipefail
 
 if [ $# -ne 1 ]; then
-  echo "使い方: scripts/check.sh <mod>" >&2
+  echo "使い方: .scripts/check.sh <mod>" >&2
   exit 2
 fi
 
@@ -34,6 +34,7 @@ if [ -f "$mod/.claude-plugin/types/tsconfig.json" ]; then
 fi
 
 # 型定義がまだ生成されていないときは、plugin-authoring スキルが書き出す型定義を使う
+# shellcheck disable=SC2012
 types=$(ls -t "${TEMP:-${TMPDIR:-/tmp}}"/claude/bundled-skills/*/*/plugin-authoring/types/claude-code.d.ts 2>/dev/null | head -n 1 || true)
 if [ -z "$types" ]; then
   echo "型定義が見つからないので tsc を飛ばす。Mod を一度読み込むか、plugin-authoring スキルを読み込んでから再実行する" >&2
