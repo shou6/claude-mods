@@ -1,6 +1,6 @@
 {
   "name": "compact-tools",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "ターミナルでシェルの出力を 1 行に畳み、/compact-tools で全出力表示と切り替える",
   "author": { "name": "shou6" },
   "types": "./types/index.d.ts",
