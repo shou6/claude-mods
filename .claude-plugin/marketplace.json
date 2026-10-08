@@ -1,6 +1,8 @@
 {
   "name": "shou6-mods",
-  "owner": { "name": "shou6" },
+  "owner": {
+    "name": "shou6"
+  },
   "metadata": {
     "description": "Claude Code の Mod 集"
   },
@@ -19,6 +21,11 @@
       "name": "compact-tools",
       "source": "./compact-tools",
       "description": "ターミナルでシェルの出力を 1 行に畳み、/compact-tools で全出力表示と切り替える"
+    },
+    {
+      "name": "work-ledger",
+      "source": "./work-ledger",
+      "description": "ターンごとのトークンとツール呼び出しを JSONL に記録し、/note で作業メモを残す"
     }
   ]
 }
