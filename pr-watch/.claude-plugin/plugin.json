@@ -1,0 +1,22 @@
+{
+  "name": "pr-watch",
+  "version": "0.1.0",
+  "description": "自分の PR の状態とレビュー依頼の件数を帯に出し、/prs で一覧を開く",
+  "author": { "name": "shou6" },
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "intervalMinutes": {
+      "type": "number",
+      "title": "取り直す間隔（分）",
+      "description": "GitHub から PR を取り直す間隔。1 未満は 1 にする（既定：5）",
+      "default": 5
+    },
+    "scope": {
+      "type": "string",
+      "title": "対象のリポジトリ",
+      "description": "all はすべてのリポジトリ、repo は今いるリポジトリだけ（既定：all）",
+      "options": ["all", "repo"],
+      "default": "all"
+    }
+  }
+}
