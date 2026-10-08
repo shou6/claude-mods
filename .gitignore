@@ -23,7 +23,7 @@ Thumbs.db
 **/.claude-plugin/types/
 
 # 実装メモ
-docs/backlog/
+.docs/backlog/
 .automation/
 
 # 自発提案の状態ファイル

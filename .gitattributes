@@ -4,6 +4,6 @@
 *.ps1 text eol=crlf
 
 # GitHub の言語統計
-docs/** linguist-documentation
+.docs/** linguist-documentation
 *.lock linguist-generated
 package-lock.json linguist-generated
