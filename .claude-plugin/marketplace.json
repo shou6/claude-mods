@@ -1,6 +1,8 @@
 {
   "name": "shou6-mods",
-  "owner": { "name": "shou6" },
+  "owner": {
+    "name": "shou6"
+  },
   "metadata": {
     "description": "Claude Code の Mod 集"
   },
@@ -19,6 +21,11 @@
       "name": "compact-tools",
       "source": "./compact-tools",
       "description": "ターミナルでシェルの出力を 1 行に畳み、/compact-tools で全出力表示と切り替える"
+    },
+    {
+      "name": "pr-watch",
+      "source": "./pr-watch",
+      "description": "自分の PR の状態とレビュー依頼の件数を帯に出し、/prs で一覧を開く"
     }
   ]
 }
