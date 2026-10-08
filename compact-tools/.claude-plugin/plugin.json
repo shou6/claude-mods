@@ -1,6 +1,6 @@
 {
   "name": "compact-tools",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "ターミナルでシェルの出力を 1 行に畳み、/compact-tools で全出力表示と切り替える",
   "author": { "name": "shou6" },
   "types": "./types/index.d.ts",
@@ -8,20 +8,20 @@
     "show": {
       "type": "string",
       "title": "畳んだ行に出す行",
-      "description": "both は先頭行と末尾の行、first は先頭行、last は末尾の行",
+      "description": "both は先頭行と末尾の行、first は先頭行、last は末尾の行（既定：both）",
       "options": ["both", "first", "last"],
       "default": "both"
     },
     "minLines": {
       "type": "number",
       "title": "畳む行数",
-      "description": "出力がこの行数以上のときに畳む",
+      "description": "出力がこの行数以上のときに畳む（既定：2）",
       "default": 2
     },
     "tools": {
       "type": "string",
       "title": "畳むツール",
-      "description": "畳むツールの名前をカンマ区切りで並べる",
+      "description": "畳むツールの名前をカンマ区切りで並べる（既定：Bash,PowerShell）",
       "default": "Bash,PowerShell"
     }
   }
