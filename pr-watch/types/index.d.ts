@@ -9,18 +9,31 @@ export type MyPr = {
   number: number
   title: string
   url: string
+  branch: string
   isDraft: boolean
   checks: Checks
   review: Review
   hasConflict: boolean
+  // 解決していないレビューコメントのスレッドの数
+  unresolved: number
 }
 
 export type ReviewPr = { repo: string; number: number; title: string; url: string; author: string }
 
-export type Summary = { mine: MyPr[]; review: ReviewPr[]; error: string | null; fetchedAt: number }
+export type Summary = {
+  mine: MyPr[]
+  review: ReviewPr[]
+  // 今いるブランチの PR。自分の PR の中になければ null
+  current: MyPr | null
+  error: string | null
+  fetchedAt: number
+}
+
+// 一覧の Pane で先頭に出す節
+export type Section = 'mine' | 'review'
 
 declare module 'claude-code' {
   interface PluginState {
-    'pr-watch': { summary: Summary | null }
+    'pr-watch': { summary: Summary | null; section: Section }
   }
 }

@@ -1,4 +1,4 @@
-import type { Checks, MyPr, Review, Summary } from '../types'
+import type { Checks, MyPr, Review, ReviewPr, Summary } from '../types'
 
 export type { Summary }
 
@@ -62,11 +62,11 @@ export const parse = (stdout: string, fetchedAt: number): Summary => {
   try {
     body = JSON.parse(stdout) as Response
   } catch {
-    return { mine: [], review: [], error: 'gh の答えを読めない', fetchedAt }
+    return { mine: [], review: [], current: null, error: 'gh の答えを読めない', fetchedAt }
   }
 
   const message = body.errors?.[0]?.message
-  if (message !== undefined) return { mine: [], review: [], error: message, fetchedAt }
+  if (message !== undefined) return { mine: [], review: [], current: null, error: message, fetchedAt }
 
   // 検索結果には PR 以外の空のノードが混ざることがあるので、番号のないものは外す
   const nodes = (list?: { nodes?: Node[] }) => (list?.nodes ?? []).filter((node) => typeof node.number === 'number')
@@ -76,6 +76,8 @@ export const parse = (stdout: string, fetchedAt: number): Summary => {
 
     return {
       ...base(node),
+      branch: '',
+      unresolved: 0,
       isDraft: node.isDraft === true,
       checks: (state && CHECKS[state]) || null,
       review: (node.reviewDecision && REVIEWS[node.reviewDecision]) || null,
@@ -87,7 +89,7 @@ export const parse = (stdout: string, fetchedAt: number): Summary => {
     author: node.author?.login ?? '',
   }))
 
-  return { mine, review, error: null, fetchedAt }
+  return { mine, review, current: null, error: null, fetchedAt }
 }
 
 // origin の URL から GitHub の owner/name を取り出す。GitHub でなければ null
@@ -158,3 +160,14 @@ export const paneMarkdown = (summary: Summary) => {
     `最終更新 ${pad(at.getHours())}:${pad(at.getMinutes())}`,
   ].join('\n\n')
 }
+
+// 以下は未実装（テストを先にコミットするための仮の形）
+export const currentOf = (_mine: readonly MyPr[], _repo: string | null, _branch: string): MyPr | null => null
+export const mineLabel = (_summary: Summary) => ''
+export const reviewLabel = (_summary: Summary) => ''
+export const currentLabel = (_pr: MyPr) => ''
+export const rowLabels = (_pr: MyPr): string[] => []
+export const changes = (_prev: Summary | null, _next: Summary): string[] => []
+export const commentPrompt = (_pr: MyPr) => ''
+export const ciPrompt = (_pr: MyPr) => ''
+export const reviewPrompt = (_pr: ReviewPr) => ''

@@ -19,7 +19,7 @@ async function refresh($: EngineInterface, config: Config) {
     repo = repoOf((await $.session.repo())?.remote ?? null)
     // GitHub のリポジトリでなければ、取るものがない
     if (repo === null) {
-      await update($, summary, () => ({ mine: [], review: [], error: null, fetchedAt: now }))
+      await update($, summary, () => ({ mine: [], review: [], current: null, error: null, fetchedAt: now }))
       return
     }
   }
@@ -32,6 +32,7 @@ async function refresh($: EngineInterface, config: Config) {
         : {
             mine: [],
             review: [],
+            current: null,
             error: result.stderr.split(/\r?\n/)[0]?.trim() || `gh が ${result.exitCode} で終わった`,
             fetchedAt: now,
           }
@@ -40,6 +41,7 @@ async function refresh($: EngineInterface, config: Config) {
     await update($, summary, () => ({
       mine: [],
       review: [],
+      current: null,
       error: 'gh が見つからない',
       fetchedAt: now,
     }))
