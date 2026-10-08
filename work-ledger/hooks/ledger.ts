@@ -15,6 +15,17 @@ export const localDate = (ms: number) => {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
 }
 
+// 記録の時刻。ローカル時刻に UTC との差を付けた ISO 8601（2026-10-08T12:00:00.000+09:00）
+export const localIso = (ms: number) => {
+  const d = new Date(ms)
+  const offset = -d.getTimezoneOffset()
+  const sign = offset < 0 ? '-' : '+'
+  const zone = `${sign}${pad(Math.floor(Math.abs(offset) / 60))}:${pad(Math.abs(offset) % 60)}`
+  const millis = String(d.getMilliseconds()).padStart(3, '0')
+
+  return `${localDate(ms)}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}.${millis}${zone}`
+}
+
 export const bytes = (text: string) => new TextEncoder().encode(text).length
 
 // userConfig の dir、なければホームの下の .claude/work-ledger。区切りは / にそろえる

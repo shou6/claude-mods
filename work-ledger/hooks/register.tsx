@@ -1,6 +1,6 @@
 import type { EngineInterface, Register } from 'claude-code'
 
-import { bytes, fileOf, joinLines, LIMIT, localDate, resolveDir, toLines, type LedgerRecord } from './ledger'
+import { bytes, fileOf, joinLines, LIMIT, localDate, localIso, resolveDir, toLines, type LedgerRecord } from './ledger'
 
 const NOTE = 'note'
 
@@ -35,7 +35,7 @@ async function ledgerDir($: EngineInterface, dir: string) {
 async function append($: EngineInterface, dir: string, records: readonly LedgerRecord[]) {
   const now = await $.clock.now()
   const sessionId = await $.session.id()
-  const lines = toLines(records, new Date(now).toISOString(), sessionId)
+  const lines = toLines(records, localIso(now), sessionId)
 
   const { path, text } = await target($, `${await ledgerDir($, dir)}/${localDate(now)}/${sessionId}`, bytes(lines))
   await $.fs.write(path, joinLines(text, lines))
