@@ -33,16 +33,17 @@ marketplace の追加を聞かれたら `y` を押し、スコープを選ぶ。
 
 work-ledger は、記録を `~/.claude/work-ledger/<日付>/<セッション ID>.jsonl` に 1 件 1 行で書く。置き場所は設定の `dir` で変えられる。日報やコストの分析は、このファイルを読むスキルを作れば行える。
 
-全件に `v`（形式の版）、`type`、`ts`（ISO 8601）、`sessionId` が付く。
+全件に `v`（形式の版）、`type`、`ts`（ローカル時刻の ISO 8601）、`sessionId` が付く。
 
 | type | 項目 | 書く時点 |
 | --- | --- | --- |
 | `session` | `event`（`start` / `end`）、`cwd`、`repo`（開始時）、`reason`（終了時） | セッションの開始と終了 |
-| `turn` | `turnId`、`agentId`（サブエージェントのみ）、`cwd`、`model`、`durationMs`、`reason`、`usage`（`input` / `output` / `cacheRead` / `cacheCreation`） | ターンの終わり |
-| `tool` | `turnId`、`agentId`（サブエージェントのみ）、`tool`、`durationMs`、`resultChars`、`isError` | ターンの終わりにまとめて |
+| `turn` | `turnId`、`agentId`（サブエージェントのみ）、`cwd`、`model`、`durationMs`、`reason`、`usage`（`input` / `output` / `cacheRead` / `cacheCreation`）、`prompt`（メインのループのみ） | ターンの終わり |
+| `tool` | `turnId`、`agentId`（サブエージェントのみ）、`tool`、`path`（Read / Edit / Write のみ）、`durationMs`、`resultChars`、`isError` | ターンの終わりにまとめて。`ts` は呼び出しを始めた時刻 |
 | `note` | `cwd`、`text` | `/note <本文>` |
 
-- ツールの引数、ツールの結果の本文、プロンプトと返答の本文は記録しない。`resultChars` は結果の文字数だけを数える
+- `prompt` は、ターンを始めたプロンプトの先頭 100 文字。改行と連続する空白は 1 つの空白にまとめる。文字数は設定の `promptChars` で変えられ、0 にすると記録しない
+- ファイルパスのほかのツールの引数、ツールの結果の本文、返答の本文は記録しない。`resultChars` は結果の文字数だけを数える
 - 1 つのファイルが 3 MiB を超えたら、続きを `<セッション ID>-2.jsonl` に書く
 
 ## ライセンス
