@@ -28,3 +28,6 @@ docs/backlog/
 
 # 自発提案の状態ファイル
 .automation/
+
+# ローカル用の指示
+CLAUDE.local.md
