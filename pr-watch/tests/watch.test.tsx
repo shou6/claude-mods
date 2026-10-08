@@ -52,7 +52,7 @@ const engine = (
   on('prompt.fill', (_$, e) => {
     fills.push(e.text)
 
-    return { value: { isFilled: true } } as never
+    return { isFilled: true } as never
   })
   on('ui.render', ($, e) => {
     const { Text } = $.ui.resolve(e)
