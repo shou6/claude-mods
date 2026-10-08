@@ -14,6 +14,11 @@
       "name": "mermaid-view",
       "source": "./mermaid-view",
       "description": "返答の mermaid のブロックを、ターミナルの中で色付きの罫線の図として描く"
+    },
+    {
+      "name": "compact-tools",
+      "source": "./compact-tools",
+      "description": "ターミナルでシェルの出力を 1 行に畳み、/compact-tools で全出力表示と切り替える"
     }
   ]
 }
