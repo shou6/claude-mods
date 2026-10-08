@@ -67,6 +67,7 @@ export const engine = (on: On, { files = {}, results = {} }: Options = {}) => {
   })
   on('command.register', (_$, e) => ({ value: { command: e.name } }))
   on('command.run', () => ({}))
+  on('turn.start', (_$, e) => ({ turnId: e.turnId }))
   on('turn.complete', () => ({ text: '' }) as never)
   on('tool.call', (_$, e) => ({ result: {}, text: results[e.tool] ?? '' }) as never)
 
