@@ -1,5 +1,5 @@
 import { atom, read, update } from 'claude-code'
-import type { Register } from 'claude-code'
+import type { EngineInterface, Register } from 'claude-code'
 
 const COMMAND = 'compact-tools'
 
@@ -31,6 +31,24 @@ const pick = (lines: string[], show: Show) => {
   return lines.length === 1 ? first : `${first} … ${last}`
 }
 
+type Fold = { tools: string[]; minLines: number }
+
+// 畳むときは出力の行を返す。畳まないときは undefined
+async function foldable(
+  $: EngineInterface,
+  surface: string,
+  props: { tool: string; output?: unknown; isErrored: boolean },
+  fold: Fold,
+) {
+  const isCompactable = surface === 'terminal' && !props.isErrored && fold.tools.includes(props.tool)
+  if (!isCompactable || (await read($, isFull))) return undefined
+
+  const lines = linesOf(props.output)
+
+  // 短い出力は畳んでも読みやすくならない
+  return lines.length === 0 || lines.length < fold.minLines ? undefined : lines
+}
+
 export const register: Register = (on, options) => {
   const show: Show = options.show === 'first' || options.show === 'last' ? options.show : 'both'
   const minLines = typeof options.minLines === 'number' ? options.minLines : 2
@@ -38,6 +56,7 @@ export const register: Register = (on, options) => {
     .split(',')
     .map(name => name.trim())
     .filter(name => name !== '')
+  const fold: Fold = { tools, minLines }
 
   on('session.start', async ($, e, next) => {
     await $.command.register({
@@ -59,19 +78,21 @@ export const register: Register = (on, options) => {
     return { text: full ? 'ツール出力: 全出力表示' : 'ツール出力: 1 行表示' }
   })
 
+  // fullscreen でまとめられた呼び出しを開くと、出力は ToolUse の行が描く。出力だけを 1 行に書き換えて渡す
+  on('ui.render', { component: 'ToolUse' }, async ($, e, next) => {
+    if (e.props.isRunning) return next(e)
+
+    const lines = await foldable($, e.surface, e.props, fold)
+    if (lines === undefined) return next(e)
+
+    const output = { ...(e.props.output as object), stdout: `${lines.length} 行 · ${pick(lines, show)}`, stderr: '' }
+
+    return next({ ...e, props: { ...e.props, output } })
+  })
+
   on('ui.render', { component: 'ToolResult' }, async ($, e, next) => {
-    const isCompactable = e.surface === 'terminal' && !e.props.isErrored && tools.includes(e.props.tool)
-
-    if (!isCompactable || (await read($, isFull))) {
-      return next(e)
-    }
-
-    const lines = linesOf(e.props.output)
-
-    // 短い出力は畳んでも読みやすくならない
-    if (lines.length === 0 || lines.length < minLines) {
-      return next(e)
-    }
+    const lines = await foldable($, e.surface, e.props, fold)
+    if (lines === undefined) return next(e)
 
     const { Text } = $.ui.resolve(e)
 
