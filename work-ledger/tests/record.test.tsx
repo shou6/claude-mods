@@ -103,9 +103,10 @@ test('サブエージェントのツール呼び出しは、そのサブエー�
 })
 
 test('エラーになったツール呼び出しと拒否された呼び出しは isError を true にする', OPTIONS, async ($, on) => {
-  const { records } = engine(on)
+  // 先に登録したフックが上に立ち、engine の答えより先に答える
   on('tool.call', { tool: 'Bash' }, () => ({ result: {}, text: 'failed', isError: true }) as never)
   on('tool.call', { tool: 'Write' }, () => ({ deny: 'no' }))
+  const { records } = engine(on)
   await $.tool.call({ tool: 'Bash', command: 'false' } as never)
   await $.tool.call({ tool: 'Write', file_path: 'a', content: 'b' } as never)
   await $.turn.complete(COMPLETE)

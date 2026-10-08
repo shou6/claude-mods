@@ -31,9 +31,18 @@ type Options = {
   results?: Record<string, string>
 }
 
+// エンジンはパスを OS の絶対パスにしてから渡す（Windows では D:\ledger\...）。
+// 区切りを / にそろえ、ドライブ名を外して比べる
+const normalize = (path: string) => path.replace(/\\/g, '/').replace(/^[A-Za-z]:(?=\/)/, '')
+
 // プラグインの下でエンジンの代わりに答える。ファイルはメモリーに持つ
 export const engine = (on: On, { files = {}, results = {} }: Options = {}) => {
-  const fs = new Map(Object.entries(files))
+  const stored = new Map(Object.entries(files).map(([path, text]) => [normalize(path), text]))
+  const fs = {
+    has: (path: string) => stored.has(normalize(path)),
+    get: (path: string) => stored.get(normalize(path)),
+    set: (path: string, text: string) => stored.set(normalize(path), text),
+  }
   const session = { id: 's1' }
   const clock = mock.clock(on, { now: NOW })
 

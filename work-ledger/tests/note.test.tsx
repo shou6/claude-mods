@@ -6,13 +6,14 @@ const OPTIONS = { options: { dir: DIR } }
 const FILE = `${TODAY}/s1.jsonl`
 
 test('セッションが始まると /note を登録する', OPTIONS, async ($, on) => {
-  engine(on)
+  // 先に登録したフックが上に立ち、engine の答えより先に答える
   const names: string[] = []
-  on('command.register', (_$, e) => {
+  on('command.register', { name: 'note' }, (_$, e) => {
     names.push(e.name)
 
     return { value: { command: e.name } }
   })
+  engine(on)
   await $.session.start(START)
 
   expect(names).toContain('note')
