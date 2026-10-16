@@ -31,6 +31,13 @@ marketplace の追加を聞かれたら `y` を押し、スコープを選ぶ。
 - Claude Code v2.1.287 以降
 - 表示はターミナルの `claude` と Desktop アプリの Code タブだけで出る。VS Code 拡張のチャット欄には出ない
 
+## status-band の表示
+
+バーは `▰` `▱` で描く。端末のフォントにこの記号がないと、別のフォントで代わりに描かれてバーがズレる。
+
+- 例：Windows Terminal の Ubuntu（WSL）プロファイルは、既定で専用のフォントを使うためズレる
+- 対処：プロファイルのフォントを Cascadia Mono など、この記号を持つフォントに変える
+
 ## pr-watch の使い方
 
 pr-watch は GitHub CLI（`gh`）で PR を取る。`gh auth login` でログインしておく。
